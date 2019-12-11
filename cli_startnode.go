@@ -14,5 +14,5 @@ func (cli *CLI) startNode(nodeID, minerAddress string) {
 			log.Panic("Wrong miner address!")
 		}
 	}
-	StartServer(nodeID, minerAddress)
+	StartServer(nodeID, minerAddress) //minerAddress为矿工收益地址.由矿工自己设置.
 }

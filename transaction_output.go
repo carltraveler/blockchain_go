@@ -8,8 +8,8 @@ import (
 
 // TXOutput represents a transaction output
 type TXOutput struct {
-	Value      int
-	PubKeyHash []byte
+	Value      int    //token的数量.
+	PubKeyHash []byte //公钥，用来锁定受益人.即锁定所有权.
 }
 
 // Lock signs the output
@@ -25,9 +25,9 @@ func (out *TXOutput) IsLockedWithKey(pubKeyHash []byte) bool {
 }
 
 // NewTXOutput create a new TXOutput
-func NewTXOutput(value int, address string) *TXOutput {
+func NewTXOutput(value int, address string) *TXOutput { // address为支付对象。将来的utxo所有者.
 	txo := &TXOutput{value, nil}
-	txo.Lock([]byte(address))
+	txo.Lock([]byte(address)) //Lock就是将address反转成pubKey。填写到TXOutput.PubKeyHash中去.
 
 	return txo
 }

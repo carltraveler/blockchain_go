@@ -16,7 +16,7 @@ func (cli *CLI) getBalance(address, nodeID string) {
 	balance := 0
 	pubKeyHash := Base58Decode([]byte(address))
 	pubKeyHash = pubKeyHash[1 : len(pubKeyHash)-4]
-	UTXOs := UTXOSet.FindUTXO(pubKeyHash)
+	UTXOs := UTXOSet.FindUTXO(pubKeyHash) //查询UTXOSet. 比用Blockchain.FindUTXO查找要快很多.
 
 	for _, out := range UTXOs {
 		balance += out.Value

@@ -15,6 +15,7 @@ const version = byte(0x00)
 const addressChecksumLen = 4
 
 // Wallet stores private and public keys
+//钱包就是一对公钥私钥.
 type Wallet struct {
 	PrivateKey ecdsa.PrivateKey
 	PublicKey  []byte
@@ -29,8 +30,9 @@ func NewWallet() *Wallet {
 }
 
 // GetAddress returns wallet address
+//地址是通过公钥经过特定的hash运算得到的.
 func (w Wallet) GetAddress() []byte {
-	pubKeyHash := HashPubKey(w.PublicKey)
+	pubKeyHash := HashPubKey(w.PublicKey) //same as HASH160
 
 	versionedPayload := append([]byte{version}, pubKeyHash...)
 	checksum := checksum(versionedPayload)
@@ -42,6 +44,7 @@ func (w Wallet) GetAddress() []byte {
 }
 
 // HashPubKey hashes public key
+//传入公钥，返回地址。所以公钥和地址的性质是一样的。
 func HashPubKey(pubKey []byte) []byte {
 	publicSHA256 := sha256.Sum256(pubKey)
 
@@ -56,6 +59,7 @@ func HashPubKey(pubKey []byte) []byte {
 }
 
 // ValidateAddress check if address if valid
+//检查一个base58的地址是否合法.
 func ValidateAddress(address string) bool {
 	pubKeyHash := Base58Decode([]byte(address))
 	actualChecksum := pubKeyHash[len(pubKeyHash)-addressChecksumLen:]
@@ -68,12 +72,13 @@ func ValidateAddress(address string) bool {
 
 // Checksum generates a checksum for a public key
 func checksum(payload []byte) []byte {
-	firstSHA := sha256.Sum256(payload)
+	firstSHA := sha256.Sum256(payload) //经过两次连续的sum256. 也就是HASH256
 	secondSHA := sha256.Sum256(firstSHA[:])
 
 	return secondSHA[:addressChecksumLen]
 }
 
+//生成公钥私钥对，用来填充钱包.
 func newKeyPair() (ecdsa.PrivateKey, []byte) {
 	curve := elliptic.P256()
 	private, err := ecdsa.GenerateKey(curve, rand.Reader)

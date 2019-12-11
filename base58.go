@@ -7,7 +7,7 @@ import (
 
 var b58Alphabet = []byte("123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz")
 
-// Base58Encode encodes a byte array to Base58
+// Base58Encode encodes a byte array to Base58  返回Base58地址.
 func Base58Encode(input []byte) []byte {
 	var result []byte
 
